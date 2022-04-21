@@ -33,9 +33,8 @@ api = Api(app)
 
 # Path to data directory where the objects will be stored. You might
 # want to change this for your container deployment.
-data_path = Path.cwd () / 'data'
-print("Intended datapath:",data_path)
-
+# data_path = Path.cwd () / 'data'
+data_path = Path('//root/webApp/data')
 # global toggle for random delays
 random_delay_enabled = True
 random_delay_bounds = [5, 200]       # in milliseconds

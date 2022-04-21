@@ -1,0 +1,20 @@
+Installed podman
+Installed buildah
+
+Createds container from alpine linux
+
+Installed python3
+
+Installed pip3 using - apk add py3-pip
+
+Installed flask-restful using pip3
+
+Installed flask-limiter using pip3 - buildah run $container -- pip3 install --ignore-installed flask-limiter
+
+edited .py file - hardcoded datapath
+
+copied app folder
+
+committed container
+
+ran container using - podman run -p 5000:5000 --rm --name mycontainer webappcontainer2
