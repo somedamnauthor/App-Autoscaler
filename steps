@@ -26,8 +26,9 @@ buildah run $container -- pip3 install --ignore-installed flask-limiter
 
 edited .py file objst.py (File provided) - hardcoded datapath
 
-copied app folder. SHOULD BE MOUNTED ideally
-buildah copy $container webApp //root/webApp
+Created app folder and copied in the app file and data. DATA SHOULD BE MOUNTED ideally
+buildah copy $container cco1/webapp.py /root/webApp/objst.py
+buildah copy $container cco1/data /root/webApp/data
 
 committed container - 
 buildah commit $container webappcontainer
@@ -53,3 +54,6 @@ Created new file in new directory for the config file - haconfig.cfg (File provi
 ran haproxy container using - 
 podman run -d --restart always --name lbcontainer -p 8080:8080 -p 9999:9999 -p 8888:8888 -v /home/srishankar/Documents/cco1/haproxyFiles/haproxy:/etc/haproxy --net mynetwork d9d8ef41d986cd
 (the last string is the image ID for the pulled haproxy image)
+
+If config file is changed, kill container using - 
+podman kill -s HUP lbcontainer
