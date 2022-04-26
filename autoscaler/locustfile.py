@@ -11,3 +11,5 @@ class User(HttpUser):
     def putData(self):
         objIdString = "/objs/" + str(randrange(10000))
         self.client.put(objIdString, {"content":"swarm attack2!"})
+        # with self.client.put(objIdString, {"content":"swarm attack2!"}, catch_response=True) as response:
+        #     print("Response:",response)

@@ -37,7 +37,7 @@ created podman network named 'mynetwork' -
 podman network create --driver=bridge mynetwork
 
 ran container using - 
-podman run --rm --name mycontainer --net mynetwork webappcontainer2
+podman run -d --rm --name mycontainer --net mynetwork webappcontainer2
 
 
 
