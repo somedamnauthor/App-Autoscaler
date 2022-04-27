@@ -2,6 +2,7 @@ Getting started:
 ================
 
 1) podman required
+
 2) buildah required
 
 
@@ -26,10 +27,34 @@ Setting up loadbalancer:
 
 podman build -t my-haproxy .
 
-Run haproxy container using the command below. Note that the haproxy directory (inside the haproxyFiles directory) is volume mounted. These paths will have to be changed to match the current directory structure -
+3) Run haproxy container using the command below. Note that the haproxy directory (inside the haproxyFiles directory) is volume mounted. These paths will have to be changed to match the current directory structure -
  
 podman run -d --restart always --name lbcontainer -p 8080:8080 -p 9999:9999 -p 8888:8888 -v /home/srishankar/Documents/cco1/haproxyFiles/haproxy:/etc/haproxy --net mynetwork my-haproxy
 (the last string is the image ID for the my-haproxy image)
 
-#If config file is changed, kill container using - 
-#podman kill -s HUP lbcontainer
+
+
+Execute Scalingcontroller:
+==========================
+
+1) Go to the scalingController directory
+
+2) Execute the scaling controller using - 
+
+python3 autoscaler.py
+
+
+
+Execute requestGenerator:
+=========================
+
+1) Go to the requestGenerator directory
+
+2) Execute the 'pattern.sh' shell script - which starts and stops locust jobs in a specific pattern
+
+
+
+Observation:
+============
+
+Observe the scalingController scaling containers up and down from the stats page of HAProxy - http://localhost:9999/stats

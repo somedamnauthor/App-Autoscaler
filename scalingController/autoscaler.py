@@ -1,7 +1,3 @@
-# import urllib.request
-# contents = urllib.request.urlopen("http://localhost:9999/stats;csv").read()
-# print(contents)
-
 import csv
 import requests
 
