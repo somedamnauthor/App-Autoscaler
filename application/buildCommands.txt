@@ -1,0 +1,15 @@
+container=$(buildah from alpine)
+
+buildah run $container -- apk update
+buildah run $container -- apk add python3
+buildah run $container -- apk add py3-pip
+buildah run $container -- pip3 install flask-restful
+buildah run $container -- pip3 install --ignore-installed flask-limiter
+
+buildah copy $container webapp.py /root/webApp/objst.py
+buildah copy $container data /root/webApp/data
+
+buildah config --cmd "" $container
+buildah config --entrypoint "python3 //root/webApp/objst.py" $container
+
+buildah commit $container webappcontainer2
