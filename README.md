@@ -44,16 +44,20 @@ podman run -d --rm --name mycontainer --net mynetwork webappcontainer2
 Setting up loadbalancer:
 ========================
 
-pulled haproxy image - 
-https://github.com/haproxytech/haproxy-docker-alpine
+#pulled haproxy image - 
+#https://github.com/haproxytech/haproxy-docker-alpine
 
-Created new directory 'haproxy' to store haproxy config file
+Go to the haproxyFiles directory
 
-Created new file in new directory for the config file - haconfig.cfg (File provided)
- 
-ran haproxy container using - 
+Build image named 'my-haproxy' using the given Dockerfile in the haproxyFiles directory - 
+podman build -t my-haproxy .
+
+#Created new directory 'haproxy' to store haproxy config file
+#Created new file in new directory for the config file - haconfig.cfg (File provided)
+
+Run haproxy container using the command below. Note that the haproxy directory (inside the haproxyFiles directory) is volume mounted. These paths will have to be changed to match the current directory structure- 
 podman run -d --restart always --name lbcontainer -p 8080:8080 -p 9999:9999 -p 8888:8888 -v /home/srishankar/Documents/cco1/haproxyFiles/haproxy:/etc/haproxy --net mynetwork d9d8ef41d986cd
-(the last string is the image ID for the pulled haproxy image)
+(the last string is the image ID for the my-haproxy image)
 
-If config file is changed, kill container using - 
-podman kill -s HUP lbcontainer
+#If config file is changed, kill container using - 
+#podman kill -s HUP lbcontainer
