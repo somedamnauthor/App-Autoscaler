@@ -32,6 +32,7 @@ def spawnContainers(numContainersPresent, numContainersToSpawn):
         os.system("podman kill -s HUP lbcontainer")
 
 
+
 def removeContainers(numContainersToDelete):
 
     if numContainersToDelete == 0:
@@ -92,6 +93,8 @@ def monitor():
     justScaled = False
     firstTryAction = True
 
+    timeForCleanup = 0
+
     while True:
         
         with requests.Session() as s:
@@ -130,7 +133,10 @@ def monitor():
                 numToSpawn = int(newRequests/20) - numContainers + 1
 
                 print("\nNew requests:", newRequests, "\nCurrent containers: ", numContainers, "\nNumber of containers to spawn: ",numToSpawn)
+                startTime = time.time()
                 spawnContainers(numContainers, numToSpawn)
+                endTime = time.time()
+                print("Time taken to spawn containers:",endTime - startTime)
                 justScaled = True
                 firstTryAction = True
                 time.sleep(1)
@@ -140,7 +146,10 @@ def monitor():
                 print("\nNew requests:", newRequests, "\nCurrent containers: ", numContainers, "\nNumber of containers to delete: ",numToDelete)
                 if numToDelete > 0:
                     # removeContainers(numToDelete)
+                    startTime = time.time()
                     removeContainers(1)
+                    endTime = time.time()
+                    print("Time taken to remove 1 container:",endTime-startTime)
                     justScaled = True
                     firstTryAction = True
                     time.sleep(1)
@@ -149,9 +158,34 @@ def monitor():
 
         else:
             print("No new requests")
+            timeForCleanup += 1
+            if timeForCleanup == 20:
+                janitor()
+                timeForCleanup = 0
             time.sleep(1)
+
+
+
+def janitor():
+
+    print("\nCommencing podman clean-up\n")
+
+    containers = list(os.popen('podman ps --format {{.Names}}').read().split('\n'))
+    containers = [container for container in containers if container!='mycontainer' and container!='' and container!='lbcontainer']
+    
+    for container in containers:
+        deleteCommand = 'podman kill ' + container
+        print(deleteCommand)
+        os.system(deleteCommand)
+
+    print("\nCompleted podman clean-up")
+    
+    print("\nCleaning HAProxy")
+    removeContainers(len(containers))
+    os.system('cp ../haproxyFiles/haproxy/backup.cfg ../haproxyFiles/haproxy/haproxy.cfg')
+    print("\nCompleted HaProxy cleanup\n")
+
 
 # removeContainers(3)
 # spawnContainers(1, 4)
-
 monitor()
