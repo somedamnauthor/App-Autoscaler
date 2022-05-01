@@ -133,10 +133,10 @@ def monitor():
                 numToSpawn = int(newRequests/20) - numContainers + 1
 
                 print("\nNew requests:", newRequests, "\nCurrent containers: ", numContainers, "\nNumber of containers to spawn: ",numToSpawn)
-                startTime = time.time()
+                # startTime = time.time()
                 spawnContainers(numContainers, numToSpawn)
-                endTime = time.time()
-                print("Time taken to spawn containers:",endTime - startTime)
+                # endTime = time.time()
+                # print("Time taken to spawn containers:",endTime - startTime)
                 justScaled = True
                 firstTryAction = True
                 time.sleep(1)
@@ -146,10 +146,10 @@ def monitor():
                 print("\nNew requests:", newRequests, "\nCurrent containers: ", numContainers, "\nNumber of containers to delete: ",numToDelete)
                 if numToDelete > 0:
                     # removeContainers(numToDelete)
-                    startTime = time.time()
+                    # startTime = time.time()
                     removeContainers(1)
-                    endTime = time.time()
-                    print("Time taken to remove 1 container:",endTime-startTime)
+                    # endTime = time.time()
+                    # print("Time taken to remove 1 container:",endTime-startTime)
                     justScaled = True
                     firstTryAction = True
                     time.sleep(1)
@@ -183,9 +183,38 @@ def janitor():
     print("\nCleaning HAProxy")
     removeContainers(len(containers))
     os.system('cp ../haproxyFiles/haproxy/backup.cfg ../haproxyFiles/haproxy/haproxy.cfg')
+    os.system('podman kill -s HUP lbcontainer')
     print("\nCompleted HaProxy cleanup\n")
 
 
 # removeContainers(3)
 # spawnContainers(1, 4)
+
+
+def experiments():
+
+    spawn = []
+    remove = []
+
+    for i in range(1,11):
+
+        start = time.time()
+        spawnContainers(1,i)
+        end = time.time()
+        spawn.append(end-start)
+        # print("Time taken for spawn:",end-start)
+
+        start = time.time()
+        removeContainers(i)
+        end = time.time()
+        remove.append(end-start)
+        # print("Time taken for remove:",end-start)
+
+
+    print("Spawn times:",spawn)
+    print("Remove times:",remove)
+
+
 monitor()
+
+# experiments()

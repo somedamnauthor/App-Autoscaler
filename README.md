@@ -12,6 +12,11 @@ Creating the webapp container:
 
 1) Go to the 'application' directory and execute the commands given in buildCommands.txt to build the podman image named 'webappcontainer2'
 
+2) Create a podman network named 'mynetwork' -
+ 
+podman network create --driver=bridge mynetwork
+
+
 2) Run container using - 
 
 podman run -d --rm --name mycontainer --net mynetwork webappcontainer2
@@ -27,7 +32,8 @@ Setting up loadbalancer:
 
 podman build -t my-haproxy .
 
-3) Run haproxy container using the command below. Note that the haproxy directory (inside the haproxyFiles directory) is volume mounted. These paths will have to be changed to match the current directory structure -
+3) Run haproxy container using the command below. Note that the haproxy directory (inside the haproxyFiles directory) is volume mounted. 
+These paths will have to be changed to match the current directory structure. Specifically change /home/srishankar/Documents/cco1/haproxyFiles/haproxy to the haproxy folder containing the config file
  
 podman run -d --restart always --name lbcontainer -p 8080:8080 -p 9999:9999 -p 8888:8888 -v /home/srishankar/Documents/cco1/haproxyFiles/haproxy:/etc/haproxy --net mynetwork my-haproxy
 (the last string is the image ID for the my-haproxy image)
