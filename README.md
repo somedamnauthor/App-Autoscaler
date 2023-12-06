@@ -1,6 +1,8 @@
 Getting started:
 ================
 
+This tool is an autoscaler that deploys your application as a Podman container and automatically scales up and scales down multiple instances of it based on incoming load. The instances are loadbalanced through a self-managed load-balancer.
+
 1) podman required
 
 2) buildah required
